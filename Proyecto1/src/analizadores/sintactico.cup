@@ -1,0 +1,54 @@
+package analizadores; 
+import java_cup.runtime.*;
+
+parser code 
+{:
+    
+    
+
+    public String salida = "";
+
+    public String getsalida(){
+        return salida;
+    }
+
+    public void syntax_error(Symbol s){ 
+        System.out.println("Error Sintáctico en la Línea " + (s.left) +
+        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error síntactico irrecuperable en la Línea " + 
+        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        " no reconocido."); 
+    }  
+:} 
+
+terminal String definirglobales,id,genreport,obracket,cbracket,comment,ocomment,ccomment,semicolon,colon,oparent,cparent,integerr,doublee,stringg,equal;
+terminal String compare, comma,idstring,iddouble;
+terminal String graficabarras,osbracket,csbracket,titulo,ejex,valores,dollar,puntajeespecifico,titulox,tituloy,graficapie,graficalineas;
+
+non terminal String INICIO, REPORTEESTADISTICO, CUERPO, VARIABLES,VARIABLE,VARGLOBAL,TIPO,VALOR;
+
+
+start with INICIO;
+
+INICIO::= REPORTEESTADISTICO {: System.out.println("produccion pendiente"); :};
+
+REPORTEESTADISTICO::= genreport obracket VARGLOBAL cbracket {: System.out.println("produccion reporte"); :};
+
+VARGLOBAL::= definirglobales obracket VARIABLES cbracket {: System.out.println("produccion definir globales"); :};
+
+VARIABLES::= VARIABLES VARIABLE
+           |VARIABLE
+           |error;
+
+VARIABLE::= TIPO id equal VALOR semicolon;
+
+TIPO::=idstring
+     |iddouble;
+
+VALOR::=stringg
+       |doublee;
+                
+
