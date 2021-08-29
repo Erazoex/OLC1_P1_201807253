@@ -5,6 +5,9 @@
  */
 package proyecto1;
 import analizadores.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.StringReader;
 /**
  *
@@ -17,6 +20,40 @@ public class aplication extends javax.swing.JFrame {
      */
     public aplication() {
         initComponents();
+    }
+    
+    public String leerarchivo() {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        String salida = "";
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File("C:\\Users\\brian\\OneDrive\\Escritorio\\entrada.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            // Lectura del fichero
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                salida += linea + "\n";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return salida;
     }
 
     /**
@@ -72,7 +109,7 @@ public class aplication extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String entrada = jTextArea1.getText();
-        lexico lexico = new lexico(new StringReader(entrada));
+        lexico lexico = new lexico(new StringReader(leerarchivo()));
         sintactico sintactico = new sintactico(lexico);
         
         try{
