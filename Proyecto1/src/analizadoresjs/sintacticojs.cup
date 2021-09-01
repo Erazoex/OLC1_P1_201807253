@@ -1,0 +1,166 @@
+package analizadoresjs; 
+import java_cup.runtime.*;
+
+parser code 
+{:
+    
+    
+
+    public String salida = "";
+
+    public String getsalida(){
+        return salida;
+    }
+
+    public void syntax_error(Symbol s){ 
+        System.out.println("Error Sintáctico en la Línea " + (s.left) +
+        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error síntactico irrecuperable en la Línea " + 
+        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        " no reconocido."); 
+    }  
+:} 
+
+terminal String classes,obracket,cbracket,semicolon,colon,oparent,cparent,comma,osbracket,csbracket,equal;
+terminal String var,let,tkconst,tkif,tkelse,tkfor,tkwhile,tkdo,tkswitch,tkcase,tkbreak,tkdefault;
+terminal String equalsto,different,lessthan,greaterthan,loeto,goeto;
+terminal String and,or,not,plus,minus,mult,slash,pot,modulus,charr;
+terminal String console,require;
+terminal String integerr,doublee,stringg,comment,multcomment,id;
+
+
+non terminal String INICIO, CLASES, CLASE, CONTENIDO, METODO, PARAMETROS, INSTRUCCIONES, INSTRUCCION, LLAMADA, VARIABLEUNICA;
+non terminal String VARIABLE, VALOR, CICLO, CONDICION, COMENTARIO;
+non terminal String OPERADORRELACIONAL, OPERADORDOBLE, OPERADORLOGICO, OPERADORARITMETICO,CONDICIONAL, CONDICIONALES;
+non terminal String ELSEIFS, ELSEIF, CASES, CASE, CONSOLELOG,PUNTOCOMA, TIPOIF,PASARPARAMS;
+
+precedence left plus, minus;
+precedence left slash;
+precedence left mult, pot;
+precedence left modulus;
+
+start with INICIO;
+
+
+INICIO::= CLASES {: System.out.println("produccion de inicio terminada"); :}
+        | COMENTARIO CLASES {: System.out.println("produccion de inicio terminada con comentario al principio"); :};
+
+CLASES::= CLASES CLASE
+        | CLASES COMENTARIO
+        | CLASE;
+
+CLASE::= classes id obracket CONTENIDO cbracket;
+
+CONTENIDO::= CONTENIDO METODO
+          | CONTENIDO VARIABLEUNICA
+          | CONTENIDO COMENTARIO
+          | METODO
+          | VARIABLEUNICA
+          | COMENTARIO
+          | error;
+
+PUNTOCOMA::= semicolon
+          |;
+
+COMENTARIO::= multcomment
+             | comment;
+
+VARIABLEUNICA::= id equal VALOR semicolon
+               | id equal VALOR;
+
+METODO::= id oparent PARAMETROS cparent obracket INSTRUCCIONES cbracket
+        | id oparent cparent obracket INSTRUCCIONES cbracket;
+
+PARAMETROS::= PARAMETROS comma id
+            | id;
+
+INSTRUCCIONES::= INSTRUCCIONES INSTRUCCION
+               | INSTRUCCION;
+
+INSTRUCCION::= CONDICION
+             | CICLO
+             | VARIABLE
+             | LLAMADA
+             | CONSOLELOG
+             | COMENTARIO
+             | tkbreak;
+
+
+VARIABLE::= var id equal VALOR PUNTOCOMA
+          | let id equal VALOR PUNTOCOMA
+          | tkconst id equal VALOR PUNTOCOMA
+          | id equal VALOR PUNTOCOMA;
+
+CONDICION::= tkif oparent CONDICIONALES cparent obracket INSTRUCCIONES cbracket TIPOIF
+           | tkswitch oparent VALOR cparent obracket CASES cbracket;
+
+TIPOIF::= tkelse obracket INSTRUCCIONES cbracket
+        | ELSEIFS
+        |;
+
+CASES::= CASES CASE
+       | CASE;
+
+CASE::= tkcase VALOR colon INSTRUCCIONES tkbreak semicolon
+      | tkdefault colon INSTRUCCIONES;
+
+ELSEIFS::= ELSEIFS ELSEIF
+         | ELSEIF;
+
+ELSEIF::= tkelse tkif oparent CONDICIONALES cparent obracket INSTRUCCIONES cbracket;
+
+CICLO::= tkfor oparent let id equal VALOR semicolon id OPERADORRELACIONAL VALOR semicolon id OPERADORDOBLE cparent obracket INSTRUCCIONES cbracket
+       | tkfor oparent id equal VALOR semicolon id OPERADORRELACIONAL VALOR semicolon id OPERADORDOBLE cparent obracket INSTRUCCIONES cbracket
+       | tkwhile oparent CONDICIONALES cparent obracket INSTRUCCIONES cbracket
+       | tkdo obracket INSTRUCCIONES cbracket tkwhile CONDICIONALES semicolon;
+
+CONDICIONALES::= CONDICIONALES OPERADORLOGICO CONDICIONAL
+               | CONDICIONAL;
+
+CONDICIONAL::= VALOR OPERADORRELACIONAL VALOR
+            | not CONDICIONAL;
+
+CONSOLELOG::= console oparent VALOR cparent PUNTOCOMA;
+
+LLAMADA::= id oparent PASARPARAMS cparent semicolon
+         | id oparent cparent semicolon;
+
+PASARPARAMS::= PASARPARAMS comma VALOR
+            | VALOR;
+
+OPERADORDOBLE::= plus plus
+               | minus minus;
+
+
+OPERADORRELACIONAL::= equalsto
+                     | different
+                     | lessthan
+                     | greaterthan
+                     | loeto
+                     | goeto;
+
+VALOR::= VALOR OPERADORARITMETICO VALOR
+       | minus VALOR
+       | oparent VALOR cparent
+       | integerr
+       | doublee
+       | id
+       | charr
+       | stringg
+       | error;
+
+OPERADORARITMETICO::= plus
+                    | minus
+                    | modulus
+                    | pot
+                    | mult
+                    | slash;
+
+OPERADORLOGICO::= and
+                | or;
+
+
+

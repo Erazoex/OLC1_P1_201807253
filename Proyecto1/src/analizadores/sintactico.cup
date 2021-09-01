@@ -90,6 +90,7 @@ TIPO::=idstring
      |iddouble;
 
 VALOR::=stringg
-       |doublee;
+       |doublee
+       |integerr;
                 
 
