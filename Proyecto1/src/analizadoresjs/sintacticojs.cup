@@ -1,16 +1,13 @@
 package analizadoresjs; 
 import java_cup.runtime.*;
-import proyecto1.*;
 
 parser code 
 {:
     
     
-    public listaSimple list = new listaSimple();
+
     public String salida = "";
-    public int linecounter = 0;
-    public int cont_params = 0;
-    public int lines = 0;
+
     public String getsalida(){
         return salida;
     }
@@ -36,9 +33,9 @@ terminal String integerr,doublee,stringg,comment,multcomment,id;
 
 
 non terminal String INICIO, CLASES, CLASE, CONTENIDO, METODO, PARAMETROS, INSTRUCCIONES, INSTRUCCION, LLAMADA, VARIABLEUNICA;
-non terminal String VARIABLE, VALOR, CICLO, CONDICION, COMENTARIO;
+non terminal String VARIABLE, VALOR, CICLO, CONDICION, COMENTARIO, VARIABLES,REQUIRE;
 non terminal String OPERADORRELACIONAL, OPERADORDOBLE, OPERADORLOGICO, OPERADORARITMETICO,CONDICIONAL, CONDICIONALES;
-non terminal String ELSEIFS, ELSEIF, CASES, CASE, CONSOLELOG,PUNTOCOMA, TIPOIF,PASARPARAMS,TIPOVARIABLE;
+non terminal String ELSEIFS, ELSEIF, CASES, CASE, CONSOLELOG,PUNTOCOMA, TIPOIF,PASARPARAMS;
 
 precedence left plus, minus;
 precedence left slash;
@@ -48,15 +45,15 @@ precedence left modulus;
 start with INICIO;
 
 
-INICIO::= CLASES {: list.imprimirLista(); :}
-        | COMENTARIO CLASES {: list.imprimirLista(); :};
+INICIO::= CLASES {: System.out.println("produccion de inicio terminada"); :}
+        | COMENTARIO CLASES {: System.out.println("produccion de inicio terminada con comentario al principio"); :}
+        | VARIABLES CLASES    {: System.out.println("produccion de inicio terminada con comentario al principio"); :};
 
-CLASES::= CLASES CLASE 
+CLASES::= CLASES CLASE
         | CLASES COMENTARIO
         | CLASE;
 
-CLASE::= classes id:var1 obracket CONTENIDO cbracket {: list.insertarNodo("clase",var1,lines,0);
-                                                    lines = 0; :};
+CLASE::= classes id obracket CONTENIDO cbracket;
 
 CONTENIDO::= CONTENIDO METODO
           | CONTENIDO VARIABLEUNICA
@@ -69,22 +66,20 @@ CONTENIDO::= CONTENIDO METODO
 PUNTOCOMA::= semicolon
           |;
 
-COMENTARIO::= multcomment:var1 {: list.insertarNodo("comentario",var1,1,0); :}
-             | comment:var1 {: list.insertarNodo("comentario",var1,1,0); :};
+COMENTARIO::= multcomment
+             | comment;
 
 VARIABLEUNICA::= id equal VALOR semicolon
                | id equal VALOR;
 
-METODO::= id:var1 oparent PARAMETROS cparent obracket INSTRUCCIONES cbracket {: list.insertarNodo("metodo",var1,linecounter,cont_params);
-                                                                        cont_params = 0; lines += linecounter + 1; linecounter = 0; :}
-        | id:var1  oparent cparent obracket INSTRUCCIONES cbracket {: list.insertarNodo("metodo",var1,linecounter,0); 
-                                                                     lines+= linecounter +1; linecounter = 0; :};
+METODO::= id oparent PARAMETROS cparent obracket INSTRUCCIONES cbracket
+        | id oparent cparent obracket INSTRUCCIONES cbracket;
 
-PARAMETROS::= PARAMETROS comma id {: cont_params++; :}
-            | id {: cont_params++; :};
+PARAMETROS::= PARAMETROS comma id
+            | id;
 
-INSTRUCCIONES::= INSTRUCCIONES INSTRUCCION {: linecounter++; :}
-               | INSTRUCCION  {: linecounter++; :};
+INSTRUCCIONES::= INSTRUCCIONES INSTRUCCION
+               | INSTRUCCION;
 
 INSTRUCCION::= CONDICION
              | CICLO
@@ -94,13 +89,13 @@ INSTRUCCION::= CONDICION
              | COMENTARIO
              | tkbreak;
 
+VARIABLES::= VARIABLES VARIABLE
+           | VARIABLE;
 
-VARIABLE::= TIPOVARIABLE id:var1 equal VALOR PUNTOCOMA {: list.insertarNodo("variable",var1,1,0); :}
+VARIABLE::= var id equal VALOR PUNTOCOMA
+          | let id equal VALOR PUNTOCOMA
+          | tkconst id equal VALOR PUNTOCOMA
           | id equal VALOR PUNTOCOMA;
-
-TIPOVARIABLE::= var
-              | let
-              | tkconst;
 
 CONDICION::= tkif oparent CONDICIONALES cparent obracket INSTRUCCIONES cbracket TIPOIF
            | tkswitch oparent VALOR cparent obracket CASES cbracket;
@@ -120,7 +115,8 @@ ELSEIFS::= ELSEIFS ELSEIF
 
 ELSEIF::= tkelse tkif oparent CONDICIONALES cparent obracket INSTRUCCIONES cbracket;
 
-CICLO::= tkfor oparent VARIABLE id OPERADORRELACIONAL VALOR semicolon id OPERADORDOBLE cparent obracket INSTRUCCIONES cbracket
+CICLO::= tkfor oparent let id equal VALOR semicolon id OPERADORRELACIONAL VALOR semicolon id OPERADORDOBLE cparent obracket INSTRUCCIONES cbracket
+       | tkfor oparent id equal VALOR semicolon id OPERADORRELACIONAL VALOR semicolon id OPERADORDOBLE cparent obracket INSTRUCCIONES cbracket
        | tkwhile oparent CONDICIONALES cparent obracket INSTRUCCIONES cbracket
        | tkdo obracket INSTRUCCIONES cbracket tkwhile CONDICIONALES semicolon;
 
@@ -149,8 +145,11 @@ OPERADORRELACIONAL::= equalsto
                      | loeto
                      | goeto;
 
+REQUIRE::= require oparent VALOR cparent;
+
 VALOR::= VALOR OPERADORARITMETICO VALOR
        | minus VALOR
+       | REQUIRE
        | oparent VALOR cparent
        | integerr
        | doublee
