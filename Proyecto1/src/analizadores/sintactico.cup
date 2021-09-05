@@ -1,10 +1,10 @@
 package analizadores; 
 import java_cup.runtime.*;
-
+import proyecto1.*;
 parser code 
 {:
     
-    
+    public manejoArchivos handler = new manejoArchivos();
 
     public String salida = "";
 
@@ -26,22 +26,25 @@ parser code
 
 terminal String definirglobales,id,genreport,obracket,cbracket,comment,multcomment,ocomment,ccomment,semicolon,colon,oparent,cparent,integerr,doublee,stringg,equal;
 terminal String compare, comma,idstring,iddouble,ruta;
-terminal String graficabarras,osbracket,csbracket,titulo,ejex,valores,dollar,puntajeespecifico,titulox,tituloy,graficapie,graficalineas,archivo;
+terminal String graficabarras,osbracket,csbracket,titulo,ejex,valores,dollar,puntajeespecifico,puntajegeneral,titulox,tituloy,graficapie,graficalineas,archivo;
 
-non terminal String INICIO, REPORTEESTADISTICO, CUERPO, VARIABLES,VARIABLE,VARGLOBAL,TIPO,VALOR, GRAFICAS, GRAFICA, GRAFICABARRAS, GRAFICAPIE, GRAFICALINEAS, COMPARE;
-non terminal String EXPRESION, ARRAY, VALORESPERADO,COMENTARIOS;
+non terminal String INICIO, REPORTEESTADISTICO, VARIABLES,VARIABLE,VARGLOBAL,TIPO,VALOR, GRAFICAS, GRAFICA, GRAFICABARRAS, GRAFICAPIE, GRAFICALINEAS, COMPARE;
+non terminal String EXPRESION, ARRAY, VALORESPERADO,COMENTARIO,PUNTAJES, INSTRUCCIONES, INSTRUCCION;
 
 start with INICIO;
 
 INICIO::= REPORTEESTADISTICO {: System.out.println("produccion pendiente"); :};
 
-REPORTEESTADISTICO::= genreport obracket VARGLOBAL GRAFICAS cbracket {: System.out.println("produccion reporte"); :}
-                   | COMENTARIOS REPORTEESTADISTICO;
+REPORTEESTADISTICO::= genreport obracket INSTRUCCIONES cbracket {: System.out.println("produccion reporte"); :}
+                   | COMENTARIO REPORTEESTADISTICO;
 
-GRAFICAS::= GRAFICAS GRAFICA
-          | GRAFICAS COMPARE
-          | GRAFICAS COMENTARIOS
-          | GRAFICA;
+INSTRUCCIONES::= INSTRUCCIONES INSTRUCCION
+               | INSTRUCCION;
+
+INSTRUCCION::= VARGLOBAL
+             | GRAFICA
+             | COMENTARIO
+             | COMPARE;
 
 GRAFICA::= GRAFICABARRAS
          | GRAFICAPIE
@@ -58,7 +61,7 @@ GRAFICALINEAS::= graficalineas obracket EXPRESION cbracket;
 EXPRESION::= titulo colon VALORESPERADO semicolon ejex colon osbracket ARRAY csbracket semicolon valores colon osbracket ARRAY csbracket semicolon titulox colon VALORESPERADO semicolon tituloy colon VALORESPERADO semicolon
            | titulo colon VALORESPERADO semicolon ejex colon osbracket ARRAY csbracket semicolon valores colon osbracket ARRAY csbracket semicolon
            | titulo colon VALORESPERADO semicolon archivo colon VALORESPERADO semicolon
-           | EXPRESION COMENTARIOS
+           | EXPRESION COMENTARIO
            | error;
 
 ARRAY::=  ARRAY comma VALORESPERADO
@@ -69,19 +72,17 @@ VALORESPERADO::= stringg
               | doublee
               | error;
 
-COMPARE::= compare oparent stringg comma stringg cparent semicolon;
+COMPARE::= compare oparent stringg:var1 comma stringg:var2 cparent semicolon {: handler.setArchivos(var1,var2); :};
 
-COMENTARIOS::= multcomment
+
+COMENTARIO::= multcomment
              | comment;
 
-
-VARGLOBAL::= definirglobales obracket VARIABLES cbracket {: System.out.println("produccion definir globales"); :}
-          | VARGLOBAL COMENTARIOS
-          | VARGLOBAL COMPARE;
+VARGLOBAL::= definirglobales obracket VARIABLES cbracket {: System.out.println("produccion definir globales"); :};
 
 VARIABLES::= VARIABLES VARIABLE
            |VARIABLE
-           |VARIABLES COMENTARIOS
+           |VARIABLES COMENTARIO
            |error;
 
 VARIABLE::= TIPO id equal VALOR semicolon;
@@ -89,7 +90,11 @@ VARIABLE::= TIPO id equal VALOR semicolon;
 TIPO::=idstring
      |iddouble;
 
+PUNTAJES::= dollar obracket puntajeespecifico comma stringg comma stringg comma stringg cbracket
+          | dollar obracket puntajegeneral cbracket;
+
 VALOR::=stringg
+       |PUNTAJES
        |doublee
        |integerr;
                 

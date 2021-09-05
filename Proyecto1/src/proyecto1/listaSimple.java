@@ -20,7 +20,7 @@ public class listaSimple {
     }
     
     public boolean estaVacia(){
-        if(tamano == 0){
+        if(this.raiz == null){
             return true;
         }
         return false;
@@ -47,11 +47,27 @@ public class listaSimple {
         }
     }
     
+    public nodo getNodo(int posicion){
+        nodo aux = new nodo();
+        aux = this.raiz;
+        int contador = 0;
+        if(posicion <= tamano){
+            while(contador != posicion){
+                aux = aux.siguiente;
+                contador++;
+            }
+            return aux;
+        }
+        return null;
+    }
+    
+    
     public void imprimirLista(){
         if(estaVacia()){
             System.out.println("La lista esta vacia");
         }else{
-            nodo aux = this.raiz;
+            nodo aux = new nodo();
+            aux = this.raiz;
             while(aux!= this.ultimo.siguiente){
                 System.out.println("nombre: "+aux.id);
                 System.out.println("tipo: " + aux.Tipo);

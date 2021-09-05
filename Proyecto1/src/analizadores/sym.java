@@ -20,26 +20,27 @@ public class sym {
   public static final int cbracket = 6;
   public static final int ruta = 23;
   public static final int ccomment = 10;
+  public static final int graficapie = 35;
   public static final int puntajeespecifico = 31;
-  public static final int graficapie = 34;
   public static final int equal = 18;
-  public static final int graficalineas = 35;
+  public static final int graficalineas = 36;
   public static final int EOF = 0;
   public static final int cparent = 14;
   public static final int oparent = 13;
   public static final int error = 1;
   public static final int colon = 12;
+  public static final int puntajegeneral = 32;
   public static final int multcomment = 8;
   public static final int stringg = 17;
   public static final int graficabarras = 24;
   public static final int comment = 7;
   public static final int id = 3;
   public static final int idstring = 21;
-  public static final int tituloy = 33;
-  public static final int titulox = 32;
+  public static final int tituloy = 34;
+  public static final int titulox = 33;
   public static final int titulo = 27;
   public static final int csbracket = 26;
-  public static final int archivo = 36;
+  public static final int archivo = 37;
   public static final int osbracket = 25;
   public static final int integerr = 15;
   public static final int semicolon = 11;
@@ -78,6 +79,7 @@ public class sym {
   "valores",
   "dollar",
   "puntajeespecifico",
+  "puntajegeneral",
   "titulox",
   "tituloy",
   "graficapie",

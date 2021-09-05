@@ -47,6 +47,7 @@ ID=[A-Za-z]+["_"0-9A-Za-z]*
 "valores"                              {return new Symbol(sym.valores, yyline, yychar, yytext());}
 "$"                                    {return new Symbol(sym.dollar, yyline, yychar, yytext());}
 "puntajeespecifico"                    {return new Symbol(sym.puntajeespecifico, yyline, yychar, yytext());}
+"puntajegeneral"                       {return new Symbol(sym.puntajegeneral, yyline, yychar, yytext());}
 "titulox"                              {return new Symbol(sym.titulox, yyline, yychar, yytext());}
 "tituloy"                              {return new Symbol(sym.tituloy, yyline, yychar, yytext());}
 "graficapie"                           {return new Symbol(sym.graficapie, yyline, yychar, yytext());}

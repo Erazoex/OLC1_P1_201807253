@@ -15,6 +15,10 @@ parser code
         return salida;
     }
 
+    public listaSimple getLista(){
+        return list;
+    }
+
     public void syntax_error(Symbol s){ 
         System.out.println("Error Sintáctico en la Línea " + (s.left) +
         " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
@@ -44,12 +48,13 @@ precedence left plus, minus;
 precedence left slash;
 precedence left mult, pot;
 precedence left modulus;
+precedence left equal;
 
 start with INICIO;
 
 
-INICIO::= CLASES {: list.imprimirLista(); :}
-        | COMENTARIO CLASES {: list.imprimirLista(); :};
+INICIO::= CLASES
+        | COMENTARIO CLASES;
 
 CLASES::= CLASES CLASE 
         | CLASES COMENTARIO
@@ -86,13 +91,14 @@ PARAMETROS::= PARAMETROS comma id {: cont_params++; :}
 INSTRUCCIONES::= INSTRUCCIONES INSTRUCCION {: linecounter++; :}
                | INSTRUCCION  {: linecounter++; :};
 
-INSTRUCCION::= CONDICION
-             | CICLO
-             | VARIABLE
-             | LLAMADA
-             | CONSOLELOG
-             | COMENTARIO
-             | tkbreak;
+INSTRUCCION::= CONDICION {: linecounter+=2; :}
+             | CICLO {: linecounter+=3; :}
+             | VARIABLE {: linecounter++; :}
+             | LLAMADA {: linecounter++; :}
+             | CONSOLELOG {: linecounter++; :}
+             | COMENTARIO {: linecounter++; :}
+             | tkbreak {: linecounter++; :}
+             | id plus plus semicolon {: linecounter++; :};
 
 
 VARIABLE::= TIPOVARIABLE id:var1 equal VALOR PUNTOCOMA {: list.insertarNodo("variable",var1,1,0); :}
@@ -120,9 +126,9 @@ ELSEIFS::= ELSEIFS ELSEIF
 
 ELSEIF::= tkelse tkif oparent CONDICIONALES cparent obracket INSTRUCCIONES cbracket;
 
-CICLO::= tkfor oparent VARIABLE id OPERADORRELACIONAL VALOR semicolon id OPERADORDOBLE cparent obracket INSTRUCCIONES cbracket
+CICLO::= tkfor oparent VARIABLE VALOR OPERADORRELACIONAL VALOR semicolon VALOR  cparent obracket INSTRUCCIONES cbracket
        | tkwhile oparent CONDICIONALES cparent obracket INSTRUCCIONES cbracket
-       | tkdo obracket INSTRUCCIONES cbracket tkwhile CONDICIONALES semicolon;
+       | tkdo obracket INSTRUCCIONES cbracket tkwhile oparent CONDICIONALES cparent semicolon;
 
 CONDICIONALES::= CONDICIONALES OPERADORLOGICO CONDICIONAL
                | CONDICIONAL;
@@ -150,6 +156,8 @@ OPERADORRELACIONAL::= equalsto
                      | goeto;
 
 VALOR::= VALOR OPERADORARITMETICO VALOR
+       | VALOR OPERADORDOBLE
+       |OPERADORARITMETICO
        | minus VALOR
        | oparent VALOR cparent
        | integerr
@@ -162,6 +170,7 @@ VALOR::= VALOR OPERADORARITMETICO VALOR
 OPERADORARITMETICO::= plus
                     | minus
                     | modulus
+                    | equal
                     | pot
                     | mult
                     | slash;
