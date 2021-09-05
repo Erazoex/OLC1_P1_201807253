@@ -5,8 +5,13 @@ parser code
 {:
     
     public manejoArchivos handler = new manejoArchivos();
+    public Repitencia valorEspecifico = new Repitencia();
 
     public String salida = "";
+    
+    public Repitencia getListaDeValorEspecifico(){
+        return valorEspecifico;
+    }
 
     public String getsalida(){
         return salida;
@@ -72,7 +77,7 @@ VALORESPERADO::= stringg
               | doublee
               | error;
 
-COMPARE::= compare oparent stringg:var1 comma stringg:var2 cparent semicolon {: handler.setArchivos(var1,var2); :};
+COMPARE::= compare oparent stringg:var1 comma stringg:var2 cparent semicolon {: handler.setArchivos(var1,var2); handler.setListaValorEspecifico(valorEspecifico);:};
 
 
 COMENTARIO::= multcomment
@@ -90,7 +95,7 @@ VARIABLE::= TIPO id equal VALOR semicolon;
 TIPO::=idstring
      |iddouble;
 
-PUNTAJES::= dollar obracket puntajeespecifico comma stringg comma stringg comma stringg cbracket
+PUNTAJES::= dollar obracket puntajeespecifico comma stringg:var1 comma stringg:var2 comma stringg:var3 cbracket {: valorEspecifico.insertarPuntaje(var1,var2,var3,0); :}
           | dollar obracket puntajegeneral cbracket;
 
 VALOR::=stringg

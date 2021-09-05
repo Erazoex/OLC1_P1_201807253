@@ -307,19 +307,22 @@ public class aplication extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         if(archivoDeEntrada != ""){
-        lexico lexico = new lexico(new StringReader(leerarchivo(archivoDeEntrada)));
-        sintactico sintactico = new sintactico(lexico);
-        
-        try{
-            sintactico.parse();
-        }
-        catch(Exception e){
-            System.out.println("Error al analizar la entrada");
-            System.out.println("debido a: "+e.getCause());
-        }
+            lexico lexico = new lexico(new StringReader(leerarchivo(archivoDeEntrada)));
+            sintactico sintactico = new sintactico(lexico);
+
+            try{
+                sintactico.parse();
+            }
+            catch(Exception e){
+                System.out.println("Error al analizar la entrada");
+                System.out.println("debido a: "+e.getCause());
+            }
+            
         }else{
             System.out.println("no existe ni un archivo cargado");
         }
+        
+        
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed

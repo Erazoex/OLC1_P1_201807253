@@ -12,6 +12,7 @@ package proyecto1;
 public class Repitencia {
     public puntaje raiz;
     public puntaje ultimo;
+    public int tamano = 0;
     
     public void Repitencia(){
         this.raiz = null;
@@ -26,9 +27,11 @@ public class Repitencia {
         new_puntaje.puntaje = puntaje_;
         if(estaVacio()){
             this.raiz = this.ultimo = new_puntaje;
+            tamano++;
         }else{
             this.ultimo.siguiente = new_puntaje;
             this.ultimo= this.ultimo.siguiente;
+            tamano++;
         }
     }
     
@@ -51,15 +54,44 @@ public class Repitencia {
         }
     }
     
-    public double getPuntaje(String tipo, String id){
+    public puntaje getNodo(int posicion){
+        puntaje aux = new puntaje();
+        aux = this.raiz;
+        int contador = 0;
+        if(posicion <= tamano){
+            while(contador != posicion){
+                aux = aux.siguiente;
+                contador++;
+            }
+            return aux;
+        }
+        return null;
+    }
+    
+    public int cantidadRepetida(String tipo){
+        puntaje aux = new puntaje();
+        int contar = 0;
+        aux = this.raiz;
+        while(aux != null){
+            if(aux.tipo.equals(tipo)){
+                contar++;
+            }
+            aux = aux.siguiente;
+        }
+        return contar;
+    }
+    
+    public double getPuntaje(String nombreArchivo,String tipo, String id){
         puntaje puntaje_aux = new puntaje();
         puntaje_aux = this.raiz;
         while(puntaje_aux != null){
-            if(puntaje_aux.tipo.equals(tipo) && puntaje_aux.id.equals(id)){
+            if(puntaje_aux.archivo.equals(nombreArchivo) && puntaje_aux.tipo.equals(tipo) && puntaje_aux.id.equals(id)){
                 return puntaje_aux.puntaje;
             }
+            puntaje_aux = puntaje_aux.siguiente;
         }
         System.out.println("no se encontro el puntaje");
+        System.out.println("asdfasdfas");
         return 0;
     }
     
@@ -68,6 +100,19 @@ public class Repitencia {
         aux = this.raiz;
         while(aux!= null){
             if(aux.id.equals(comparar.id)){
+                return true;
+            }
+            //System.out.println("comprobando");
+            aux = aux.siguiente;
+        }
+        return false;
+    }
+    
+    public boolean isIn(String id){
+        puntaje aux = new puntaje();
+        aux = this.raiz;
+        while(aux!= null){
+            if(aux.id.equals(id)){
                 return true;
             }
             //System.out.println("comprobando");

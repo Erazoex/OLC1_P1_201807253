@@ -225,8 +225,13 @@ public class sintactico extends java_cup.runtime.lr_parser {
 
     
     public manejoArchivos handler = new manejoArchivos();
+    public Repitencia valorEspecifico = new Repitencia();
 
     public String salida = "";
+    
+    public Repitencia getListaDeValorEspecifico(){
+        return valorEspecifico;
+    }
 
     public String getsalida(){
         return salida;
@@ -526,7 +531,7 @@ class CUP$sintactico$actions {
 		int var2left = ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-2)).left;
 		int var2right = ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-2)).right;
 		String var2 = (String)((java_cup.runtime.Symbol) CUP$sintactico$stack.elementAt(CUP$sintactico$top-2)).value;
-		 handler.setArchivos(var1,var2); 
+		 handler.setArchivos(var1,var2); handler.setListaValorEspecifico(valorEspecifico);
               CUP$sintactico$result = parser.getSymbolFactory().newSymbol("COMPARE",12, ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-6)), ((java_cup.runtime.Symbol)CUP$sintactico$stack.peek()), RESULT);
             }
           return CUP$sintactico$result;
@@ -625,7 +630,16 @@ class CUP$sintactico$actions {
           case 38: // PUNTAJES ::= dollar obracket puntajeespecifico comma stringg comma stringg comma stringg cbracket 
             {
               String RESULT =null;
-
+		int var1left = ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-5)).left;
+		int var1right = ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-5)).right;
+		String var1 = (String)((java_cup.runtime.Symbol) CUP$sintactico$stack.elementAt(CUP$sintactico$top-5)).value;
+		int var2left = ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-3)).left;
+		int var2right = ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-3)).right;
+		String var2 = (String)((java_cup.runtime.Symbol) CUP$sintactico$stack.elementAt(CUP$sintactico$top-3)).value;
+		int var3left = ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-1)).left;
+		int var3right = ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-1)).right;
+		String var3 = (String)((java_cup.runtime.Symbol) CUP$sintactico$stack.elementAt(CUP$sintactico$top-1)).value;
+		 valorEspecifico.insertarPuntaje(var1,var2,var3,0); 
               CUP$sintactico$result = parser.getSymbolFactory().newSymbol("PUNTAJES",17, ((java_cup.runtime.Symbol)CUP$sintactico$stack.elementAt(CUP$sintactico$top-9)), ((java_cup.runtime.Symbol)CUP$sintactico$stack.peek()), RESULT);
             }
           return CUP$sintactico$result;
