@@ -253,18 +253,16 @@ public class aplication extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        /*String entrada = jTextArea1.getText();
-        String a = "C:\\Users\\brian\\OneDrive\\Escritorio\\entrada.txt";
-        lexico lexico = new lexico(new StringReader(leerarchivo(a)));
+        lexico lexico = new lexico(new StringReader(leerarchivo("C:\\Users\\brian\\OneDrive\\Escritorio\\ArchivosPruebaOLC1-2S2021-master\\Proyecto 1\\Pruebas\\Prueba1\\Copias.fca")));
         sintactico sintactico = new sintactico(lexico);
-        
+
         try{
             sintactico.parse();
         }
         catch(Exception e){
             System.out.println("Error al analizar la entrada");
             System.out.println("debido a: "+e.getCause());
-        }*/
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

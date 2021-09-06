@@ -22,7 +22,6 @@ DD=[0-9]+("."[ |0-9]+)?
 CADENA = [\"](\s*[^\"\n]|(\\\"))*[\"]
 COMENTARIOMULT = (\#\*(\s*|.*)*\*\#)
 COMENTARIO = \#\#.*
-RUTA = \"[A-Z]:\\(\w+\\)*\w+\"
 ID=[A-Za-z]+["_"0-9A-Za-z]*
 
 %%
@@ -31,8 +30,6 @@ ID=[A-Za-z]+["_"0-9A-Za-z]*
 "generarreporteestadistico"            {return new Symbol(sym.genreport, yyline, yychar, yytext());}
 "{"                                    {return new Symbol(sym.obracket, yyline, yychar, yytext());}
 "}"                                    {return new Symbol(sym.cbracket, yyline, yychar, yytext());}
-"#*"                                   {return new Symbol(sym.ocomment, yyline, yychar, yytext());}
-"*#"                                   {return new Symbol(sym.ccomment, yyline, yychar, yytext());}
 ";"                                    {return new Symbol(sym.semicolon, yyline, yychar, yytext());}
 ":"                                    {return new Symbol(sym.colon, yyline, yychar, yytext());}
 "("                                    {return new Symbol(sym.oparent, yyline, yychar, yytext());}
@@ -64,7 +61,6 @@ ID=[A-Za-z]+["_"0-9A-Za-z]*
 {D}                                    {return new Symbol(sym.integerr, yyline, yychar, yytext());}
 {DD}                                   {return new Symbol(sym.doublee, yyline, yychar, yytext());}
 {CADENA}                               {return new Symbol(sym.stringg, yyline, yychar, yytext());}
-{RUTA}                                 {return new Symbol(sym.ruta, yyline, yychar, yytext());}
 {COMENTARIO}                           {return new Symbol(sym.comment, yyline, yychar, yytext());}
 {COMENTARIOMULT}                       {return new Symbol(sym.multcomment, yyline, yychar, yytext());}
 {ID}                                   {return new Symbol(sym.id, yyline, yychar, yytext());}

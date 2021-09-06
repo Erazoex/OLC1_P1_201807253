@@ -31,9 +31,14 @@ public class manejoArchivos {
     double puntajeGeneral;
     public Repitencia valorE = new Repitencia();
     double[] arrayPuntajes;
+    public listaVariables variablesAUsar = new listaVariables();
     
     public manejoArchivos(){
         
+    }
+    
+    public void setListaDeVariables(listaVariables varList){
+        variablesAUsar = varList;
     }
     
     public void setArchivos(String proyecto1_, String proyecto2_){
@@ -350,7 +355,6 @@ public class manejoArchivos {
     public void setListaValorEspecifico(Repitencia aux){
         System.out.println("setListaValorEspeifico");
         valorE = aux;
-        puntajeEspecificoFCA();
         /*for (int i = 0; i < arrayPuntajes.length; i++) {
             System.out.println(arrayPuntajes[i]);
         }*/

@@ -6,9 +6,14 @@ parser code
     
     public manejoArchivos handler = new manejoArchivos();
     public Repitencia valorEspecifico = new Repitencia();
-
+    public listaVariables listVar =  new listaVariables();
+    public int contar = 0;
     public String salida = "";
     
+    public listaVariables getlistaVariables(){
+        return listVar;
+    }
+
     public Repitencia getListaDeValorEspecifico(){
         return valorEspecifico;
     }
@@ -29,16 +34,16 @@ parser code
     }  
 :} 
 
-terminal String definirglobales,id,genreport,obracket,cbracket,comment,multcomment,ocomment,ccomment,semicolon,colon,oparent,cparent,integerr,doublee,stringg,equal;
-terminal String compare, comma,idstring,iddouble,ruta;
+terminal String definirglobales,id,genreport,obracket,cbracket,comment,multcomment,semicolon,colon,oparent,cparent,integerr,doublee,stringg,equal;
+terminal String compare, comma,idstring,iddouble;
 terminal String graficabarras,osbracket,csbracket,titulo,ejex,valores,dollar,puntajeespecifico,puntajegeneral,titulox,tituloy,graficapie,graficalineas,archivo;
 
-non terminal String INICIO, REPORTEESTADISTICO, VARIABLES,VARIABLE,VARGLOBAL,TIPO,VALOR, GRAFICAS, GRAFICA, GRAFICABARRAS, GRAFICAPIE, GRAFICALINEAS, COMPARE;
+non terminal String INICIO, REPORTEESTADISTICO, VARIABLES,VARIABLE,VARGLOBAL,TIPO,VALOR, GRAFICA, GRAFICABARRAS, GRAFICAPIE, GRAFICALINEAS, COMPARE;
 non terminal String EXPRESION, ARRAY, VALORESPERADO,COMENTARIO,PUNTAJES, INSTRUCCIONES, INSTRUCCION;
 
 start with INICIO;
 
-INICIO::= REPORTEESTADISTICO {: System.out.println("produccion pendiente"); :};
+INICIO::= REPORTEESTADISTICO;
 
 REPORTEESTADISTICO::= genreport obracket INSTRUCCIONES cbracket {: System.out.println("produccion reporte"); :}
                    | COMENTARIO REPORTEESTADISTICO;
@@ -66,7 +71,6 @@ GRAFICALINEAS::= graficalineas obracket EXPRESION cbracket;
 EXPRESION::= titulo colon VALORESPERADO semicolon ejex colon osbracket ARRAY csbracket semicolon valores colon osbracket ARRAY csbracket semicolon titulox colon VALORESPERADO semicolon tituloy colon VALORESPERADO semicolon
            | titulo colon VALORESPERADO semicolon ejex colon osbracket ARRAY csbracket semicolon valores colon osbracket ARRAY csbracket semicolon
            | titulo colon VALORESPERADO semicolon archivo colon VALORESPERADO semicolon
-           | EXPRESION COMENTARIO
            | error;
 
 ARRAY::=  ARRAY comma VALORESPERADO
@@ -75,13 +79,13 @@ ARRAY::=  ARRAY comma VALORESPERADO
 VALORESPERADO::= stringg
               | id
               | doublee
+              | PUNTAJES
               | error;
 
-COMPARE::= compare oparent stringg:var1 comma stringg:var2 cparent semicolon {: handler.setArchivos(var1,var2); handler.setListaValorEspecifico(valorEspecifico);:};
+COMPARE::= compare oparent stringg:var1 comma stringg:var2 cparent semicolon {: handler.setArchivos(var1,var2); handler.setListaValorEspecifico(valorEspecifico); handler.puntajeEspecificoFCA(); handler.setListaDeVariables(listVar); :};
 
-
-COMENTARIO::= multcomment
-             | comment;
+COMENTARIO::= comment
+            | multcomment;
 
 VARGLOBAL::= definirglobales obracket VARIABLES cbracket {: System.out.println("produccion definir globales"); :};
 
@@ -90,7 +94,7 @@ VARIABLES::= VARIABLES VARIABLE
            |VARIABLES COMENTARIO
            |error;
 
-VARIABLE::= TIPO id equal VALOR semicolon;
+VARIABLE::= TIPO:tipovar id:idvar equal VALOR:valvar semicolon {: listVar.insertarVariable(tipovar,idvar,valvar); System.out.println(idvar); :};
 
 TIPO::=idstring
      |iddouble;

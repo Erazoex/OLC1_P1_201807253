@@ -8,44 +8,41 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int valores = 29;
-  public static final int iddouble = 22;
-  public static final int compare = 19;
-  public static final int doublee = 16;
-  public static final int dollar = 30;
-  public static final int definirglobales = 2;
-  public static final int comma = 20;
-  public static final int obracket = 5;
-  public static final int ocomment = 9;
-  public static final int cbracket = 6;
-  public static final int ruta = 23;
-  public static final int ccomment = 10;
-  public static final int graficapie = 35;
-  public static final int puntajeespecifico = 31;
-  public static final int equal = 18;
-  public static final int graficalineas = 36;
-  public static final int EOF = 0;
-  public static final int cparent = 14;
-  public static final int oparent = 13;
-  public static final int error = 1;
-  public static final int colon = 12;
-  public static final int puntajegeneral = 32;
-  public static final int multcomment = 8;
-  public static final int stringg = 17;
-  public static final int graficabarras = 24;
   public static final int comment = 7;
-  public static final int id = 3;
-  public static final int idstring = 21;
-  public static final int tituloy = 34;
-  public static final int titulox = 33;
-  public static final int titulo = 27;
-  public static final int csbracket = 26;
-  public static final int archivo = 37;
-  public static final int osbracket = 25;
-  public static final int integerr = 15;
-  public static final int semicolon = 11;
-  public static final int ejex = 28;
   public static final int genreport = 4;
+  public static final int dollar = 27;
+  public static final int archivo = 34;
+  public static final int osbracket = 22;
+  public static final int oparent = 11;
+  public static final int tituloy = 31;
+  public static final int titulox = 30;
+  public static final int semicolon = 9;
+  public static final int graficabarras = 21;
+  public static final int titulo = 24;
+  public static final int doublee = 14;
+  public static final int iddouble = 20;
+  public static final int integerr = 13;
+  public static final int ejex = 25;
+  public static final int stringg = 15;
+  public static final int puntajegeneral = 29;
+  public static final int cparent = 12;
+  public static final int EOF = 0;
+  public static final int equal = 16;
+  public static final int id = 3;
+  public static final int error = 1;
+  public static final int multcomment = 8;
+  public static final int definirglobales = 2;
+  public static final int graficapie = 32;
+  public static final int obracket = 5;
+  public static final int colon = 10;
+  public static final int cbracket = 6;
+  public static final int graficalineas = 33;
+  public static final int valores = 26;
+  public static final int csbracket = 23;
+  public static final int comma = 18;
+  public static final int idstring = 19;
+  public static final int compare = 17;
+  public static final int puntajeespecifico = 28;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -56,8 +53,6 @@ public class sym {
   "cbracket",
   "comment",
   "multcomment",
-  "ocomment",
-  "ccomment",
   "semicolon",
   "colon",
   "oparent",
@@ -70,7 +65,6 @@ public class sym {
   "comma",
   "idstring",
   "iddouble",
-  "ruta",
   "graficabarras",
   "osbracket",
   "csbracket",
