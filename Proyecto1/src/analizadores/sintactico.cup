@@ -9,6 +9,13 @@ parser code
     public listaVariables listVar =  new listaVariables();
     public int contar = 0;
     public String salida = "";
+    public listaGraficaBarras graficasDeBarras = new listaGraficaBarras();
+    public graficaBarras barrasAux = new graficaBarras();
+    public listaGraficaPie graficasDePie = new listaGraficaPie();
+    public graficaPie pieAux = new graficaPie();
+    public listaGraficaLineas graficasDeLineas = new listaGraficaLineas();
+    public graficaLineas lineasAux = new graficaLineas();
+
     
     public listaVariables getlistaVariables(){
         return listVar;
@@ -18,6 +25,14 @@ parser code
         return valorEspecifico;
     }
 
+    public double getValorEsp(String archivo, String tipo, String id){
+
+        double a = handler.puntajes1.getPuntaje(archivo, tipo, id);
+        if (a == 0) {
+            a = handler.puntajes2.getPuntaje(archivo, tipo, id);
+        }
+        return a;
+    }
     public String getsalida(){
         return salida;
     }
@@ -39,13 +54,15 @@ terminal String compare, comma,idstring,iddouble;
 terminal String graficabarras,osbracket,csbracket,titulo,ejex,valores,dollar,puntajeespecifico,puntajegeneral,titulox,tituloy,graficapie,graficalineas,archivo;
 
 non terminal String INICIO, REPORTEESTADISTICO, VARIABLES,VARIABLE,VARGLOBAL,TIPO,VALOR, GRAFICA, GRAFICABARRAS, GRAFICAPIE, GRAFICALINEAS, COMPARE;
-non terminal String EXPRESION, ARRAY, VALORESPERADO,COMENTARIO,PUNTAJES, INSTRUCCIONES, INSTRUCCION;
+non terminal String EXPRESION,COMENTARIO,INSTRUCCIONES, INSTRUCCION;
+non terminal String ARRAY, ARRAYX;
+
 
 start with INICIO;
 
 INICIO::= REPORTEESTADISTICO;
 
-REPORTEESTADISTICO::= genreport obracket INSTRUCCIONES cbracket {: System.out.println("produccion reporte"); :}
+REPORTEESTADISTICO::= genreport obracket INSTRUCCIONES cbracket  {: handler.setListaGraficas(graficasDeLineas, graficasDeBarras,graficasDePie); handler.generarGrafica(); :}
                    | COMENTARIO REPORTEESTADISTICO;
 
 INSTRUCCIONES::= INSTRUCCIONES INSTRUCCION
@@ -68,43 +85,54 @@ GRAFICAPIE::= graficapie obracket EXPRESION cbracket;
 
 GRAFICALINEAS::= graficalineas obracket EXPRESION cbracket;
 
-EXPRESION::= titulo colon VALORESPERADO semicolon ejex colon osbracket ARRAY csbracket semicolon valores colon osbracket ARRAY csbracket semicolon titulox colon VALORESPERADO semicolon tituloy colon VALORESPERADO semicolon
-           | titulo colon VALORESPERADO semicolon ejex colon osbracket ARRAY csbracket semicolon valores colon osbracket ARRAY csbracket semicolon
-           | titulo colon VALORESPERADO semicolon archivo colon VALORESPERADO semicolon
+EXPRESION::= titulo colon VALOR:titulo semicolon ejex colon osbracket ARRAYX:ejex csbracket semicolon valores colon osbracket ARRAY:valores csbracket semicolon titulox colon VALOR:titulox semicolon tituloy colon VALOR:tituloy semicolon {: barrasAux.titulo = titulo; barrasAux.ejex = ejex; barrasAux.valores = valores; barrasAux.titulox = titulox ; barrasAux.tituloy = tituloy; graficasDeBarras.insertarGrafica(barrasAux);:}
+           | titulo colon VALOR:titulo semicolon ejex colon osbracket ARRAYX:ejex csbracket semicolon valores colon osbracket ARRAY:valores csbracket semicolon {: pieAux.titulo = titulo; pieAux.ejex = ejex; pieAux.valores = valores; graficasDePie.insertarGrafica(pieAux);:}
+           | titulo colon VALOR:titulo semicolon archivo colon VALOR:archivo semicolon {: lineasAux.titulo = titulo; lineasAux.archivo = archivo; graficasDeLineas.insertarGrafica(lineasAux); :}
            | error;
 
-ARRAY::=  ARRAY comma VALORESPERADO
-       | VALORESPERADO;
+ARRAYX::= ARRAYX:variable comma VALOR:var {: RESULT= variable+ "," + var; :}
+        | VALOR:variable {: RESULT= variable; :};
 
-VALORESPERADO::= stringg
-              | id
-              | doublee
-              | PUNTAJES
-              | error;
+ARRAY::=  ARRAY:variable comma VALOR:var {: puntaje temp = handler.valorE.raiz;
+                                            while(temp!= null){
+                                                if(var.equals(temp.archivo + "," + temp.tipo + "," + temp.id)){
+                                                     var = ""+temp.puntaje;
+                                                }
+                                                temp = temp.siguiente;
+                                            } 
+                                            RESULT= variable+","+var;:}
+       | VALOR:variable {: puntaje temp = handler.valorE.raiz;
+                        while(temp!= null){
+                            if(variable.equals(temp.archivo + "," + temp.tipo + "," + temp.id)){
+                                 variable = ""+temp.puntaje;
+                            }
+                            temp = temp.siguiente;
+                        }
+                        RESULT= variable;  :};
 
-COMPARE::= compare oparent stringg:var1 comma stringg:var2 cparent semicolon {: handler.setArchivos(var1,var2); handler.setListaValorEspecifico(valorEspecifico); handler.puntajeEspecificoFCA(); handler.setListaDeVariables(listVar); :};
+
+COMPARE::= compare oparent stringg:var1 comma stringg:var2 cparent semicolon {: handler.setArchivos(var1,var2); handler.setListaValorEspecifico(valorEspecifico); handler.puntajeEspecificoFCA(); handler.setListaDeVariables(listVar); handler.convertirPuntajesConSignoDeDollar(); listVar.setValorDollar(handler.valorE); listVar.imprimirVariables(); :};
 
 COMENTARIO::= comment
             | multcomment;
 
-VARGLOBAL::= definirglobales obracket VARIABLES cbracket {: System.out.println("produccion definir globales"); :};
+VARGLOBAL::= definirglobales obracket VARIABLES cbracket;
 
 VARIABLES::= VARIABLES VARIABLE
            |VARIABLE
            |VARIABLES COMENTARIO
            |error;
 
-VARIABLE::= TIPO:tipovar id:idvar equal VALOR:valvar semicolon {: listVar.insertarVariable(tipovar,idvar,valvar); System.out.println(idvar); :};
+VARIABLE::= TIPO:tipovar id:idvar equal VALOR:valvar semicolon {: listVar.insertarVariable(tipovar,idvar,valvar); :};
 
-TIPO::=idstring
-     |iddouble;
+TIPO::= idstring
+      | iddouble;
 
-PUNTAJES::= dollar obracket puntajeespecifico comma stringg:var1 comma stringg:var2 comma stringg:var3 cbracket {: valorEspecifico.insertarPuntaje(var1,var2,var3,0); :}
-          | dollar obracket puntajegeneral cbracket;
-
-VALOR::=stringg
-       |PUNTAJES
-       |doublee
-       |integerr;
+VALOR::= id:varid                                                   {: RESULT = listVar.getVar(varid); :}
+       | stringg:varstring                                          {: RESULT = varstring.replace("\"",""); :}
+       | doublee:vardouble                                          {: RESULT = vardouble; :}
+       | integerr:varinteger                                        {: RESULT = varinteger; :}
+       | dollar obracket puntajeespecifico comma VALOR:archivo comma VALOR:tipo comma VALOR:id cbracket {: valorEspecifico.insertarPuntaje(archivo,tipo,id,0); RESULT = archivo + "," + tipo + "," + id;  :}
+       | dollar obracket puntajegeneral cbracket;
                 
 

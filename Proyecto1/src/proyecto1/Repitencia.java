@@ -14,7 +14,7 @@ public class Repitencia {
     public puntaje ultimo;
     public int tamano = 0;
     
-    public void Repitencia(){
+    public Repitencia(){
         this.raiz = null;
         this.ultimo = null;
     }
@@ -51,8 +51,11 @@ public class Repitencia {
                 System.out.println("");
                 aux = aux.siguiente;
             }
+            //System.out.println(this.tamano);
         }
     }
+    
+
     
     public puntaje getNodo(int posicion){
         puntaje aux = new puntaje();
@@ -90,10 +93,21 @@ public class Repitencia {
             }
             puntaje_aux = puntaje_aux.siguiente;
         }
-        System.out.println("no se encontro el puntaje");
-        System.out.println("asdfasdfas");
         return 0;
     }
+    
+    public puntaje getNode(String nombreArchivo,String tipo, String id){
+        puntaje puntaje_aux = new puntaje();
+        puntaje_aux = this.raiz;
+        while(puntaje_aux != null){
+            if(puntaje_aux.archivo.equals(nombreArchivo) && puntaje_aux.tipo.equals(tipo) && puntaje_aux.id.equals(id)){
+                return puntaje_aux;
+            }
+            puntaje_aux = puntaje_aux.siguiente;
+        }
+        return null;
+    }
+    
     
     public boolean existe(puntaje comparar){
         puntaje aux = new puntaje();

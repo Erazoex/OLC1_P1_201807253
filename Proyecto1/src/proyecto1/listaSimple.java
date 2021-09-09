@@ -13,7 +13,7 @@ public class listaSimple {
     public int tamano;
     public nodo ultimo;
     
-    public void listSimple(){
+    public listaSimple(){
         this.raiz = null;
         this.ultimo = null;
         this.tamano = 0;
@@ -79,6 +79,19 @@ public class listaSimple {
             }
         }
         
+    }
+    
+    public boolean isIn(String id){
+        nodo aux = new nodo();
+        aux = this.raiz;
+        while(aux!= null){
+            if(aux.id.equals(id)){
+                return true;
+            }
+            //System.out.println("comprobando");
+            aux = aux.siguiente;
+        }
+        return false;
     }
     
 }

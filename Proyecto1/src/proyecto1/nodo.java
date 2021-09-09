@@ -17,7 +17,7 @@ public class nodo {
     public nodo siguiente;
             
     
-    public void nodo(String tipo, String id, int cantidadLineas, int cantidadParametros){
+    public nodo(String tipo, String id, int cantidadLineas, int cantidadParametros){
         this.id = id;
         this.Tipo = tipo;
         this.cantidadLineas = cantidadLineas;
@@ -25,7 +25,7 @@ public class nodo {
         this.siguiente = null;
     }
     
-    public void nodo(){
+    public nodo(){
         
     }
 }
