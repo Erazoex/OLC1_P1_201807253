@@ -239,7 +239,7 @@ public class manejoArchivos {
         System.out.println("calcularPuntaje2");
         nodo nodo_aux = new nodo();
         nodo comparador = new nodo();
-        for(int i = 0; i < listaProyecto2.getTamano();i++){
+        for(int i = 0; i < listaProyecto2.getTamano();i++){ 
             nodo_aux = listaProyecto2.getNodo(i);
             for(int j = 0; j < listaProyecto1.getTamano(); j++){
                 comparador = listaProyecto1.getNodo(j);
